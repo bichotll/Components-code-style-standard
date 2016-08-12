@@ -1,5 +1,5 @@
-# Reactive-code-style-standard
-Reactive code style standard - A standard to name models, methods, events and behaviours.
+# Components-code-style-standard
+Components code style standard - A standard to name models, methods, events and behaviours.
 Applicable for any reactable code mostly based on libraries applying components.
 
 ### Why this
