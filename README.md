@@ -40,17 +40,23 @@ import Ember from 'ember';
 ...try to keep the code inside the component or declare it somewhere else*/
 
 export default Ember.Component.extend({
-  /* properties first */
-  /* declare undefined variables at the very top */
+  /* Properties 
+  - First thing inside the component
+  */
+  /* 
+  - Declare undefined properties at the very top 
+  - Organise the properties by concerns, and by chunks
+  */
   secondsDuration: undefined,
-  /* organise the variables by concerns */
+  
   widthProgressBar: 0,
   widthBar: 0,
   mouseMoveOffsetX: 0,
   userIsDragging: false,
 
   /* Computed properties
-  - After properties */
+  - After properties 
+  */
   progressButtonStyle: Ember.computed('widthBar', 'mouseMoveOffsetX', function() {
     let style;
     if (this.get('userIsDragging')) {
@@ -65,13 +71,14 @@ export default Ember.Component.extend({
   /* Observers
   - Declared after computed properties
   - They just observe and fire other actions
+  - Name them by property/variableObserver
   */
   mouseMoveOffsetXObserver: Ember.observer('mouseMoveOffsetX', function () {
     this.get('onChangeMouseMoveOffsetX')();
   }),
 
   /* Methods
-  - After component events
+  - After component observers
   */
   followMousePosition () {
     let $body = $('body');
@@ -92,7 +99,7 @@ export default Ember.Component.extend({
 
   /* Component DOM events
   - After observers
-  - Fire other actions...little logic in it, fire other methods
+  - Fire other actions...little logic in it, execute other methods
   */
   mouseDown () {
     this.followMousePosition();
@@ -102,6 +109,8 @@ export default Ember.Component.extend({
   
   /* Actions
   - At the end
+  - They just know about your component
+  - Try not to repeat the same logic
   */
   actions {}
 });
