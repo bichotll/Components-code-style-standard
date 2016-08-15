@@ -23,6 +23,72 @@ Let's end up with this problem with this standard.
 
 ## Ember specification
 
+### Holy example
+
+```javascript
+/*
+ - name the component with at least one dash
+ - use subfolders to organise your components
+ - use names that make sense
+ */
+//video-player/progress-bar/button-holder.js
+
+/*import libraries at the very top*/
+import Ember from 'ember';
+
+/*you could declare other variables here depending on the scenario
+...try to keep the code inside the component or declare it somewhere else*/
+
+export default Ember.Component.extend({
+  /* declare undefined variables at the very top */
+  secondsDuration: undefined,
+  /* declare undefined variables at the very top */
+  widthProgressBar: 0,
+  widthBar: 0,
+  mouseMoveOffsetX: 0,
+  userIsDragging: false,
+
+  progressButtonStyle: Ember.computed('widthBar', 'mouseMoveOffsetX', function() {
+    let style;
+    if (this.get('userIsDragging')) {
+      style = Ember.String.htmlSafe("left: " + this.get('mouseMoveOffsetX') + "px");
+    } else {
+      style = Ember.String.htmlSafe("left: " + this.get('widthBar') + "%");
+    }
+
+    return style;
+  }),
+
+  mouseMoveOffsetXObserver: Ember.observer('mouseMoveOffsetX', function () {
+    this.get('onChangeMouseMoveOffsetX')();
+  }),
+
+  mouseDown () {
+    this.followMousePosition();
+
+    this.set('userIsDragging', true);
+  },
+
+  followMousePosition () {
+    let $body = $('body');
+
+    $body.on('mousemove', (e) => {
+      this.set('mouseMoveOffsetX', e.pageX);
+    }).on('mouseup', () => {
+      this.set('userIsDragging', false);
+      this.updateTimeByClickedPosition(this.get('mouseMoveOffsetX'));
+      //this.get('onMouseDrop')(this.get('mouseMoveOffsetX'));
+      $body.off('mousemove').off('mouseup');
+    });
+  },
+
+  updateTimeByClickedPosition (position) {
+    this.get('onChangeSecondsTime')(position);
+  }
+});
+
+```
+
 ### Components
 
 ### Files
