@@ -40,14 +40,17 @@ import Ember from 'ember';
 ...try to keep the code inside the component or declare it somewhere else*/
 
 export default Ember.Component.extend({
+  /* properties first */
   /* declare undefined variables at the very top */
   secondsDuration: undefined,
-  /* declare undefined variables at the very top */
+  /* organise the variables by concerns */
   widthProgressBar: 0,
   widthBar: 0,
   mouseMoveOffsetX: 0,
   userIsDragging: false,
 
+  /* Computed properties
+  - After properties */
   progressButtonStyle: Ember.computed('widthBar', 'mouseMoveOffsetX', function() {
     let style;
     if (this.get('userIsDragging')) {
@@ -59,16 +62,17 @@ export default Ember.Component.extend({
     return style;
   }),
 
+  /* Observers
+  - Declared after computed properties
+  - They just observe and fire other actions
+  */
   mouseMoveOffsetXObserver: Ember.observer('mouseMoveOffsetX', function () {
     this.get('onChangeMouseMoveOffsetX')();
   }),
 
-  mouseDown () {
-    this.followMousePosition();
-
-    this.set('userIsDragging', true);
-  },
-
+  /* Methods
+  - After component events
+  */
   followMousePosition () {
     let $body = $('body');
 
@@ -77,14 +81,29 @@ export default Ember.Component.extend({
     }).on('mouseup', () => {
       this.set('userIsDragging', false);
       this.updateTimeByClickedPosition(this.get('mouseMoveOffsetX'));
-      //this.get('onMouseDrop')(this.get('mouseMoveOffsetX'));
+      /* Remember to unbind events started by this component */
       $body.off('mousemove').off('mouseup');
     });
   },
 
   updateTimeByClickedPosition (position) {
     this.get('onChangeSecondsTime')(position);
-  }
+  },
+
+  /* Component DOM events
+  - After observers
+  - Fire other actions...little logic in it, fire other methods
+  */
+  mouseDown () {
+    this.followMousePosition();
+
+    this.set('userIsDragging', true);
+  },
+  
+  /* Actions
+  - At the end
+  */
+  actions {}
 });
 
 ```
